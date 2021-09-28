@@ -139,6 +139,7 @@ namespace riscv {
 			auto hi = hist_inst.find(op);
 			if (hi == hist_inst.end()) hist_inst.insert(hist_inst_pair_t(op, 1));
 			else hi->second++;
+	
 		}
 
 		void seed_registers(host_cpu &cpu, uint64_t initial_seed, size_t n)
@@ -239,6 +240,11 @@ namespace riscv {
 			return operands;
 		}
 
+		std::string print_log_opcode(decode_type &dec, inst_t inst) {
+			std::string exe_opcode = disasm_inst_simpler(dec);	
+			return exe_opcode;
+		} //wezh
+
 		void print_log(decode_type &dec, inst_t inst)
 		{
 			static const char *fmt_32 = "%019llu core-%-4zu:%08llx (%s) %-30s %s\n";
@@ -251,6 +257,7 @@ namespace riscv {
 				fegetexceptflag(&flags, FE_ALL_EXCEPT);
 				if (!(P::log & proc_log_no_pseudo)) decode_pseudo_inst(dec);
 				if (symlookup) printf("%32s ", symlookup(P::pc));
+				
 				std::string args = disasm_inst_simple(dec);
 				std::string op_args = (P::log & proc_log_operands) ? format_operands(dec) : std::string();
 				printf(P::xlen == 32 ? fmt_32 : P::xlen == 64 ? fmt_64 : fmt_128,
@@ -264,10 +271,100 @@ namespace riscv {
 
 		void print_csr_registers()
 		{
-			printf("%s %s\n", format_reg("instret", P::instret, true).c_str(),
-			                  format_reg("time", P::time).c_str());
-			printf("%s %s\n", format_reg("pc", P::pc).c_str(),
-			                  format_reg("fcsr", P::fcsr).c_str());
+			// printf("%s %s\n", format_reg("pc", P::pc).c_str(),
+			//                   format_reg("fcsr", P::fcsr).c_str());
+			//printf("mv = %lld \n", P::num_mv);
+            FILE *fp = fopen("rv-sim.log","w+");
+            if (fp!=NULL){
+                fprintf(fp,"RV32I base instruction set: \n");
+                fprintf(fp,"ADDI = %lld \n", P::num_ADDI);
+                fprintf(fp,"SLTI = %lld \n", P::num_SLTI);
+                fprintf(fp,"SLTIU = %lld \n", P::num_SLTIU);
+                fprintf(fp,"XORI = %lld \n", P::num_XORI);
+                fprintf(fp,"ORI = %lld \n", P::num_ORI);
+                fprintf(fp,"ANDI = %lld \n", P::num_ANDI);
+                fprintf(fp,"ADD = %lld \n", P::num_ADD);
+                fprintf(fp,"SUB = %lld \n", P::num_SUB);
+                fprintf(fp,"SLL = %lld \n", P::num_SLL);
+                fprintf(fp,"SLT = %lld \n", P::num_SLT);
+                fprintf(fp,"SLTU = %lld \n", P::num_SLTU);
+                fprintf(fp,"SRL = %lld \n", P::num_SRL);
+                fprintf(fp,"SRA = %lld \n", P::num_SRA);
+                fprintf(fp,"XOR = %lld \n", P::num_XOR);
+                fprintf(fp,"OR = %lld \n", P::num_OR);
+                fprintf(fp,"AND = %lld \n", P::num_AND);
+                fprintf(fp,"SLLI = %lld \n", P::num_SLLI);
+                fprintf(fp,"SRLI = %lld \n", P::num_SRLI);
+                fprintf(fp,"SRAI = %lld \n", P::num_SRAI);
+                fprintf(fp,"LUI = %lld \n", P::num_LUI);
+                fprintf(fp,"AUIPC = %lld \n", P::num_AUIPC);
+                fprintf(fp,"JAL = %lld \n", P::num_JAL);
+                fprintf(fp,"JALR = %lld \n", P::num_JALR);
+                fprintf(fp,"SB = %lld \n", P::num_SB);
+                fprintf(fp,"SH = %lld \n", P::num_SH);
+                fprintf(fp,"SW = %lld \n", P::num_SW);
+                fprintf(fp,"LB = %lld \n", P::num_LB);
+                fprintf(fp,"LH = %lld \n", P::num_LH);
+                fprintf(fp,"LW = %lld \n", P::num_LW);
+                fprintf(fp,"LBU = %lld \n", P::num_LBU);
+                fprintf(fp,"LHU = %lld \n", P::num_LHU);
+                fprintf(fp,"BEQ = %lld \n", P::num_BEQ);
+                fprintf(fp,"BNE = %lld \n", P::num_BNE);
+                fprintf(fp,"BLT = %lld \n", P::num_BLT);
+                fprintf(fp,"BGE = %lld \n", P::num_BGE);
+                fprintf(fp,"BLTU = %lld \n", P::num_BLTU);
+                fprintf(fp,"BGEU = %lld \n", P::num_BGEU);
+                fprintf(fp,"FENCE = %lld \n", P::num_FENCE);
+                fprintf(fp,"ECALL = %lld \n", P::num_ECALL);
+                fprintf(fp,"EBREAK = %lld \n", P::num_EBREAK);
+                fprintf(fp,"Zifencei standard extension: \n");
+                fprintf(fp,"FENCE_I = %lld \n", P::num_FENCE_I); // Zifencei standard extension
+                fprintf(fp,"Zicsr standard extension: \n");
+                fprintf(fp,"CSRRW = %lld \n", P::num_CSRRW);
+                fprintf(fp,"CSRRS = %lld \n", P::num_CSRRS);
+                fprintf(fp,"CSRRC = %lld \n", P::num_CSRRC);
+                fprintf(fp,"CSRRWI = %lld \n", P::num_CSRRWI);
+                fprintf(fp,"CSRRSI = %lld \n", P::num_CSRRSI);
+                fprintf(fp,"CSRRCI = %lld \n", P::num_CSRRCI);
+                fprintf(fp,"RV32M standard extension: \n");
+                fprintf(fp,"MUL = %lld \n", P::num_MUL);
+                fprintf(fp,"MULH = %lld \n", P::num_MULH);
+                fprintf(fp,"MULHSU = %lld \n", P::num_MULHSU);
+                fprintf(fp,"MULHU = %lld \n", P::num_MULHU);
+                fprintf(fp,"DIV = %lld \n", P::num_DIV);
+                fprintf(fp,"DIVU = %lld \n", P::num_DIVU);
+                fprintf(fp,"REM = %lld \n", P::num_REM);
+                fprintf(fp,"REMU = %lld \n", P::num_REMU);
+                /* fprintf(fp,"RV32A standard extension: \n");
+                fprintf(fp,"LR_W = %lld \n", P::num_LR_W);
+                fprintf(fp,"SC_W = %lld \n", P::num_SC_W);
+                fprintf(fp,"AMOSWAP_W = %lld \n", P::num_AMOSWAP_W);
+                fprintf(fp,"AMOADD_W = %lld \n", P::num_AMOADD_W);
+                fprintf(fp,"AMOXOR_W = %lld \n", P::num_AMOXOR_W);
+                fprintf(fp,"AMOAND_W = %lld \n", P::num_AMOAND_W);
+                fprintf(fp,"AMOOR_W = %lld \n", P::num_AMOOR_W);
+                fprintf(fp,"AMOMIN_W = %lld \n", P::num_AMOMIN_W);
+                fprintf(fp,"AMOMAX_W = %lld \n", P::num_AMOMAX_W);
+                fprintf(fp,"AMOMINU_W = %lld \n", P::num_AMOMINU_W);
+                fprintf(fp,"AMOMAXU_W = %lld \n", P::num_AMOMAXU_W); */
+                fprintf(fp,"privileged instructions: \n");
+                 fprintf(fp,"URET = %lld \n", P::num_URET);
+                fprintf(fp,"SRET = %lld \n", P::num_SRET);
+                fprintf(fp,"MRET = %lld \n", P::num_MRET);
+                fprintf(fp,"WFI = %lld \n", P::num_WFI);
+                fprintf(fp,"SFENCE_VMA = %lld \n", P::num_SFENCE_VMA);
+                fprintf(fp,"\n");
+                fprintf(fp,"R_type = %lld \n", P::R_type);
+                fprintf(fp,"I_type = %lld \n", P::I_type);
+                fprintf(fp,"S_type = %lld \n", P::S_type);
+                fprintf(fp,"B_type = %lld \n", P::B_type);
+                fprintf(fp,"U_type = %lld \n", P::U_type);
+                fprintf(fp,"J_type = %lld \n", P::J_type);
+                fprintf(fp,"%s\n", format_reg("instret", P::instret, true).c_str());
+                fclose(fp);
+            }
+            printf("%s \n", format_reg("time", P::time).c_str());
+            fprintf(fp,"%s\n", format_reg("instret", P::instret, true).c_str());
 		}
 
 		void print_int_registers()

@@ -98,7 +98,7 @@ const char* rv_inst_name_sym[] = {
 	"sb",
 	"sh",
 	"sw",
-	"addi",
+	"addi", 
 	"slti",
 	"sltiu",
 	"xori",

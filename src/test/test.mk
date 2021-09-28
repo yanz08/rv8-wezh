@@ -3,9 +3,9 @@
 #
 
 # Requires RISCV environment variable to be set
-# RISCV = /opt/riscv/toolchain
+#RISCV = /opt/riscv/toolchain
+RISCV = /opt/riscv-gnu-toolchain-dist-rv32imac-ilp32
 
-# host
 OS := $(shell uname -s | sed 's/ /_/' | tr A-Z a-z)
 CPU := $(shell uname -m | sed 's/ /_/' | tr A-Z a-z)
 
@@ -15,7 +15,9 @@ CXX = ${RISCV}/bin/${TARGET}-g++
 AS = ${RISCV}/bin/${TARGET}-as
 LD = ${RISCV}/bin/${TARGET}-ld
 STRIP = ${RISCV}/bin/${TARGET}-strip
-PK = ${RISCV}/${TARGET}/bin/pk
+
+PK_PATH=/opt/pk
+PK = ${PK_PATH}/${TARGET}/bin/pk
 
 TARGET_DIR = $(TARGET)
 
@@ -31,8 +33,9 @@ HOST_OBJ_DIR = build/$(OS)_$(CPU)/obj
 # compiler function tests
 check_opt = $(shell T=$$(mktemp /tmp/test.XXXX); echo 'int main() { return 0; }' > $$T.$(2) ; $(1) $(3) $$T.$(2) -o /dev/null >/dev/null 2>&1 ; echo $$?; rm $$T $$T.$(2))
 
+SPIKE_PATH = /opt/spike
 ifeq ($(TARGET),riscv32-unknown-elf)
-SPIKE = ${RISCV}/bin/spike --isa=$(ARCH) ${PK}
+SPIKE = ${SPIKE_PATH}/bin/spike --isa=$(ARCH) ${PK}
 endif
 
 ifeq ($(TARGET),riscv64-unknown-elf)

@@ -5353,7 +5353,7 @@ const int rv_inst_decomp_rv32[] = {
 	/*               c.lwsp */ rv_op_lw,
 	/*              c.flwsp */ rv_op_flw,
 	/*                 c.jr */ rv_op_jalr,
-	/*                 c.mv */ rv_op_addi,
+	/*            wezh c.mv */ rv_op_add,
 	/*             c.ebreak */ rv_op_ebreak,
 	/*               c.jalr */ rv_op_jalr,
 	/*                c.add */ rv_op_add,

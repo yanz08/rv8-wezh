@@ -184,6 +184,96 @@ namespace riscv {
 		u64 time;                     /* User Time Register */
 		u64 instret;                  /* User Number of Instructions Retired  */
 		u32 fcsr;                     /* Floating-Point Control and Status Register */
+		//I added: RV32I base instruction set
+		s64 num_ADDI = 0; //wezh
+		s64 num_SLTI = 0;
+		s64 num_SLTIU = 0;
+		s64 num_XORI = 0;
+		s64 num_ORI = 0;
+		s64 num_ANDI = 0;
+		s64 num_ADD = 0;
+		s64 num_SUB = 0;
+		s64 num_SLL = 0;
+		s64 num_SLT = 0;
+		s64 num_SLTU = 0;
+		s64 num_SRL = 0;
+		s64 num_SRA = 0;
+		s64 num_XOR = 0;
+		s64 num_OR = 0;
+		s64 num_AND = 0;
+		s64 num_SLLI = 0;
+		s64 num_SRLI = 0;
+		s64 num_SRAI = 0;
+		s64 num_LUI = 0;
+		s64 num_AUIPC = 0;
+		s64 num_JAL = 0;
+		s64 num_JALR = 0;
+		s64 num_SB = 0;
+		s64 num_SH = 0;
+		s64 num_SW = 0;
+		s64 num_LB = 0;
+		s64 num_LH = 0;
+		s64 num_LW = 0;
+		s64 num_LBU = 0;
+		s64 num_LHU = 0;
+		s64 num_BEQ = 0;
+		s64 num_BNE = 0;
+		s64 num_BLT = 0;
+		s64 num_BGE = 0;
+		s64 num_BLTU = 0;
+		s64 num_BGEU = 0;
+		s64 num_FENCE = 0;
+		s64 num_ECALL = 1;
+		s64 num_EBREAK = 0;
+		s64 num_mv = 0;
+
+		// Zifencei standard extension
+		s64 num_FENCE_I = 0;
+
+		// Zicsr standard extension
+		s64 num_CSRRW = 0;
+		s64 num_CSRRS = 0;
+		s64 num_CSRRC = 0;
+		s64 num_CSRRWI = 0;
+		s64 num_CSRRSI = 0;
+		s64 num_CSRRCI = 0;
+
+		// RV32M standard extension
+		s64 num_MUL = 0;
+		s64 num_MULH = 0;
+		s64 num_MULHSU = 0;
+		s64 num_MULHU = 0;
+		s64 num_DIV = 0;
+		s64 num_DIVU = 0;
+		s64 num_REM = 0;
+		s64 num_REMU = 0;
+
+		// RV32A standard extension
+		s64 num_LR_W = 0;
+		s64 num_SC_W = 0;
+		s64 num_AMOSWAP_W = 0;
+		s64 num_AMOADD_W = 0;
+		s64 num_AMOXOR_W = 0;
+		s64 num_AMOAND_W = 0;
+		s64 num_AMOOR_W = 0;
+		s64 num_AMOMIN_W = 0;
+		s64 num_AMOMAX_W = 0;
+		s64 num_AMOMINU_W = 0;
+		s64 num_AMOMAXU_W = 0;
+
+		// privileged instructions
+		s64 num_URET = 0;
+		s64 num_SRET = 0;
+		s64 num_MRET = 0;
+		s64 num_WFI = 0;
+		s64 num_SFENCE_VMA = 0;
+
+		s64 I_type = 0;
+		s64 R_type = 0;
+		s64 S_type = 0;
+		s64 B_type = 0;
+		s64 U_type = 0;
+		s64 J_type = 0;
 
 		processor_base() : pc(0), ireg(), freg(),
 			node_id(0), hart_id(0), log(0), lr(0), cause(0), badaddr(0), env(),

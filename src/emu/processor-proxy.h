@@ -57,6 +57,7 @@ namespace riscv {
 				printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 				P::print_csr_registers();
 
+
 				/* print program counter histogram */
 				if ((P::log & proc_log_hist_pc) && !(P::log & proc_log_jit_trap)) {
 					printf("\n");
